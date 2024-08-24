@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ae41dbdf3f4c90a7006a2fd49059d7, type: 3}
+  m_Name: BajuHijau
+  m_EditorClassIdentifier: 
+  langkahCuci: 00000000010000000400000002000000
+  Bajutype: 0
+  DisplayBajuInventory: {fileID: 525338756, guid: ab0a9786b4ab2e54899358ac8dc45643, type: 3}
+  BajuKotorSprite: {fileID: 21300000, guid: 0495049bfdaae924b86552ea139f257e, type: 3}
+  BajuBasahSprite: {fileID: 21300000, guid: 3aaa534f8ae891447a9726b7d3c4e60f, type: 3}
+  BajuBersihSpritel: {fileID: 21300000, guid: 5367634ad2638fa43807d18870d8a431, type: 3}

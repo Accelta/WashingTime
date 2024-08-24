@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ae41dbdf3f4c90a7006a2fd49059d7, type: 3}
+  m_Name: Hoodie
+  m_EditorClassIdentifier: 
+  langkahCuci: 000000000100000002000000
+  Bajutype: 0
+  DisplayBajuInventory: {fileID: 205923826, guid: 82f65800739e81540bd2de4896513ff7, type: 3}
+  BajuKotorSprite: {fileID: 21300000, guid: d6182f75d55ca1d48af1dc3615984fc0, type: 3}
+  BajuBasahSprite: {fileID: 21300000, guid: 79c5cd5ca59c24847b8193259c3a4726, type: 3}
+  BajuBersihSpritel: {fileID: 21300000, guid: 6c4e0c610c68d7e429235e7e934368ca, type: 3}

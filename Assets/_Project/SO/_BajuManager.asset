@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1dca8a0b9c14b30a0df454b43fa87fc, type: 3}
+  m_Name: _BajuManager
+  m_EditorClassIdentifier: 
+  BajuSoList:
+  - {fileID: 11400000, guid: 98fb1343d7b03bd4db152f71feb7eba7, type: 2}
+  - {fileID: 11400000, guid: f34e6a672d8745c42843ae9e10f9f81f, type: 2}
+  - {fileID: 11400000, guid: dc11ccfd856223a4ea5dc8a3c4bc5575, type: 2}
+  - {fileID: 11400000, guid: 833559238ded3074eb4cf3ac0f2b41ab, type: 2}
+  - {fileID: 11400000, guid: 36a278c9b413eba408656be83a80e475, type: 2}

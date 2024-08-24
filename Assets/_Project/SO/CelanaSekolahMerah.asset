@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ae41dbdf3f4c90a7006a2fd49059d7, type: 3}
+  m_Name: CelanaSekolahMerah
+  m_EditorClassIdentifier: 
+  langkahCuci: 00000000030000000100000002000000
+  BajuKotorSprite: {fileID: 21300000, guid: 02273ae159c8c0644be925fba92ef671, type: 3}
+  BajuBasahSprite: {fileID: 21300000, guid: 4eec54fcc094b6c4b98c717a3114359b, type: 3}
+  BajuBersihSpritel: {fileID: 21300000, guid: 4bef628c72ac0f142905219bf889062f, type: 3}
