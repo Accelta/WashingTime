@@ -3,6 +3,8 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager instance;
+    private float autoSaveInterval = 10f; // Auto-save interval in seconds
+    private float timer = 0f;
 
     private void Awake()
     {
@@ -14,6 +16,19 @@ public class SaveManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        // Increment the timer by the time passed since the last frame
+        timer += Time.deltaTime;
+
+        // Check if the timer has reached the auto-save interval
+        if (timer >= autoSaveInterval)
+        {
+            SaveGame(); // Trigger the save
+            timer = 0f; // Reset the timer
         }
     }
 
