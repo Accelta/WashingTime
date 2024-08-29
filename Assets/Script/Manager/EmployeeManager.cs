@@ -48,17 +48,28 @@ public class EmployeeManager : MonoBehaviour
         }
     }
 
-    public void UpgradeAllEmployeesSpeed(float additionalSpeed)
+public void UpgradeAllEmployeesSpeed(float additionalSpeed)
+{
+    foreach (GameObject employee in employees)
     {
-        foreach (GameObject employee in employees)
+        if (employee == null)
         {
-            Employee employeeScript = employee.GetComponent<Employee>(); // Dapatkan komponen EmployeeScript dari karyawan
-            if (employeeScript != null)
-            {
-                employeeScript.UpgradeSpeed(additionalSpeed); // Panggil metode UpgradeSpeed pada instance employeeScript
-            }
+            Debug.LogError("Employee GameObject is null!");
+            continue; // Skip this iteration
         }
+
+        Employee employeeScript = employee.GetComponent<Employee>();
+        if (employeeScript == null)
+        {
+            Debug.LogError("Employee component is missing on " + employee.name);
+            continue; // Skip this iteration
+        }
+
+        Debug.Log("Upgrading speed for: " + employee.name + " by " + additionalSpeed);
+        employeeScript.UpgradeSpeed(additionalSpeed); // Apply the speed upgrade
     }
+}
+
 
     public void UpgradeAllEmployeesCapacity(int additionalCapacity)
     {

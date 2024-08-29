@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SaveManager : MonoBehaviour
@@ -25,6 +26,7 @@ public class SaveManager : MonoBehaviour
         InitializeWashingMachines();
         autoSaveTimer = autoSaveInterval; // Initialize the auto-save timer
         LoadGame(); // Load the game when the scene starts
+        EnsureEmployeeUpgradeUI();
     }
 
     private void Update()
@@ -45,56 +47,21 @@ public class SaveManager : MonoBehaviour
         washingMachines = FindObjectsOfType<WashingMachine>();
     }
 
-    // public void SaveGame()
-    // {
-    //     InitializeWashingMachines(); // Ensure washing machines are initialized before saving
-
-    //     PlayerPrefs.SetInt("Currency", MoneyManager.instance.currency);
-    //     PlayerPrefs.SetInt("EmployeeLevel", EmployeeManager.instance.GetCurrentLevel());
-    //     PlayerPrefs.SetInt("EmployeeSpeedLevel", EmployeeUpgradeUI.instance.GetCurrentSpeedLevel());
-
-    //     // Save washing machine levels
-    //     if (washingMachines != null)
-    //     {
-    //         for (int i = 0; i < washingMachines.Length; i++)
-    //         {
-    //             PlayerPrefs.SetInt("WashingMachineLevel_" + i, washingMachines[i].UpgradeLevel);
-    //         }
-    //     }
-
-    //     PlayerPrefs.Save(); // Ensure PlayerPrefs is saved immediately
-    //     Debug.Log("Game Saved!");
-    // }
-
 public void SaveGame()
 {
     InitializeWashingMachines(); // Ensure washing machines are initialized before saving
 
-    if (MoneyManager.instance != null)
-    {
-        PlayerPrefs.SetInt("Currency", MoneyManager.instance.currency);
-    }
-    else
-    {
-        Debug.LogError("MoneyManager instance is null. Cannot save currency.");
-    }
+    PlayerPrefs.SetInt("Currency", MoneyManager.instance.currency);
+    PlayerPrefs.SetInt("EmployeeLevel", EmployeeManager.instance.GetCurrentLevel());
 
-    if (EmployeeManager.instance != null)
-    {
-        PlayerPrefs.SetInt("EmployeeLevel", EmployeeManager.instance.GetCurrentLevel());
-    }
-    else
-    {
-        Debug.LogError("EmployeeManager instance is null. Cannot save employee level.");
-    }
-
-    if (EmployeeUpgradeUI.instance != null)
+    // Only save EmployeeSpeedLevel if the UI is active
+    if (EmployeeUpgradeUI.instance != null && EmployeeUpgradeUI.instance.gameObject.activeInHierarchy)
     {
         PlayerPrefs.SetInt("EmployeeSpeedLevel", EmployeeUpgradeUI.instance.GetCurrentSpeedLevel());
     }
     else
     {
-        Debug.LogError("EmployeeUpgradeUI instance is null. Cannot save employee speed level.");
+        Debug.LogWarning("EmployeeUpgradeUI instance is null or inactive. Skipping save for employee speed level.");
     }
 
     // Save washing machine levels
@@ -105,54 +72,70 @@ public void SaveGame()
             PlayerPrefs.SetInt("WashingMachineLevel_" + i, washingMachines[i].UpgradeLevel);
         }
     }
-    else
-    {
-        Debug.LogError("WashingMachines array is null. Cannot save washing machine levels.");
-    }
 
     PlayerPrefs.Save(); // Ensure PlayerPrefs is saved immediately
     Debug.Log("Game Saved!");
 }
 
     public void LoadGame()
+{
+    InitializeWashingMachines(); // Ensure washing machines are initialized before loading
+
+    if (PlayerPrefs.HasKey("Currency"))
     {
-        InitializeWashingMachines(); // Ensure washing machines are initialized before loading
+        MoneyManager.instance.currency = PlayerPrefs.GetInt("Currency");
+    }
 
-        if (PlayerPrefs.HasKey("Currency"))
-        {
-            MoneyManager.instance.currency = PlayerPrefs.GetInt("Currency");
-        }
+    if (PlayerPrefs.HasKey("EmployeeLevel"))
+    {
+        int savedLevel = PlayerPrefs.GetInt("EmployeeLevel");
+        EmployeeManager.instance.SetCurrentLevel(savedLevel);
+    }
 
-        if (PlayerPrefs.HasKey("EmployeeLevel"))
-        {
-            int savedLevel = PlayerPrefs.GetInt("EmployeeLevel");
-            EmployeeManager.instance.SetCurrentLevel(savedLevel);
-        }
+    // Store the speed level in a temporary variable if the UI is inactive
+    if (PlayerPrefs.HasKey("EmployeeSpeedLevel"))
+    {
+        int savedSpeedLevel = PlayerPrefs.GetInt("EmployeeSpeedLevel");
 
-        if (PlayerPrefs.HasKey("EmployeeSpeedLevel"))
+        if (EmployeeUpgradeUI.instance != null && EmployeeUpgradeUI.instance.gameObject.activeInHierarchy)
         {
-            int savedSpeedLevel = PlayerPrefs.GetInt("EmployeeSpeedLevel");
             EmployeeUpgradeUI.instance.SetCurrentSpeedLevel(savedSpeedLevel);
         }
-
-        // Load washing machine levels
-        if (washingMachines != null)
+        else
         {
-            for (int i = 0; i < washingMachines.Length; i++)
+            StartCoroutine(WaitForEmployeeUIToLoad(savedSpeedLevel));
+        }
+    }
+
+    // Load washing machine levels
+    if (washingMachines != null)
+    {
+        for (int i = 0; i < washingMachines.Length; i++)
+        {
+            if (PlayerPrefs.HasKey("WashingMachineLevel_" + i))
             {
-                if (PlayerPrefs.HasKey("WashingMachineLevel_" + i))
+                int savedLevel = PlayerPrefs.GetInt("WashingMachineLevel_" + i);
+                for (int j = 0; j < savedLevel; j++)
                 {
-                    int savedLevel = PlayerPrefs.GetInt("WashingMachineLevel_" + i);
-                    for (int j = 0; j < savedLevel; j++)
-                    {
-                        washingMachines[i].Upgrade(); // Upgrade the machine to the saved level
-                    }
+                    washingMachines[i].Upgrade(); // Upgrade the machine to the saved level
                 }
             }
         }
-
-        Debug.Log("Game Loaded!");
     }
+
+    Debug.Log("Game Loaded!");
+}
+
+private IEnumerator WaitForEmployeeUIToLoad(int savedSpeedLevel)
+{
+    while (EmployeeUpgradeUI.instance == null || !EmployeeUpgradeUI.instance.gameObject.activeInHierarchy)
+    {
+        yield return null; // Wait until EmployeeUpgradeUI is active
+    }
+
+    EmployeeUpgradeUI.instance.SetCurrentSpeedLevel(savedSpeedLevel);
+    Debug.Log("Employee Speed Level Loaded After UI Activation");
+}
 
     private void OnApplicationQuit()
     {
@@ -199,5 +182,11 @@ public void resetSave()
     SaveGame(); // Save the reset state
     Debug.Log("Game reset and saved.");
 }
-
+private void EnsureEmployeeUpgradeUI()
+{
+    if (EmployeeUpgradeUI.instance == null)
+    {
+        Debug.LogError("EmployeeUpgradeUI instance is null. Cannot proceed with saving or loading.");
+    }
+}
 }
