@@ -20,6 +20,21 @@ public class EmployeeUpgradeUI : MonoBehaviour
     private int[] speedUpgradeCosts = { 60000, 80000, 100000 }; // Biaya untuk upgrade kecepatan berjalan
 
     public EmployeeManager employeeManager;
+    public static EmployeeUpgradeUI instance;
+
+        private void Awake()
+    {
+        // Singleton pattern
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -111,5 +126,16 @@ public class EmployeeUpgradeUI : MonoBehaviour
             speedLevelIndicators[i].sprite = greyBubble;
         }
     }
+}
+
+public int GetCurrentSpeedLevel()
+{
+    return currentSpeedLevel; // Assuming you have a currentSpeedLevel variable
+}
+
+public void SetCurrentSpeedLevel(int level)
+{
+    currentSpeedLevel = level;
+    employeeManager.UpgradeAllEmployeesSpeed(speedLevels[currentSpeedLevel]);
 }
 }

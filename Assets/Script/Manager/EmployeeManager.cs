@@ -8,6 +8,21 @@ public class EmployeeManager : MonoBehaviour
     private List<GameObject> employees = new List<GameObject>();
     private int currentlvl = 0;
     private int maxEmployees = 3; // Jumlah maksimum karyawan
+    public static EmployeeManager instance;
+
+        private void Awake()
+    {
+        // Singleton pattern
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void AddEmployee()
 {
@@ -50,4 +65,14 @@ public class EmployeeManager : MonoBehaviour
             }
         }
     }
+    public int GetCurrentLevel()
+{
+    return currentlvl; // Assuming you have a currentLevel variable
+}
+
+public void SetCurrentLevel(int level)
+{
+    currentlvl = level;
+    // Rebuild employees based on the saved level if necessary
+}
 }
