@@ -3,8 +3,9 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager instance;
-    private float autoSaveInterval = 10f; // Auto-save interval in seconds
-    private float timer = 0f;
+    private WashingMachine[] washingMachines;
+    private float autoSaveInterval = 15f; // Auto-save interval in seconds
+    private float autoSaveTimer;
 
     private void Awake()
     {
@@ -19,32 +20,52 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        InitializeWashingMachines();
+        autoSaveTimer = autoSaveInterval; // Initialize the auto-save timer
+    }
+
     private void Update()
     {
-        // Increment the timer by the time passed since the last frame
-        timer += Time.deltaTime;
+        // Count down the auto-save timer
+        autoSaveTimer -= Time.deltaTime;
 
-        // Check if the timer has reached the auto-save interval
-        if (timer >= autoSaveInterval)
+        // Check if it's time to auto-save
+        if (autoSaveTimer <= 0f)
         {
-            SaveGame(); // Trigger the save
-            timer = 0f; // Reset the timer
+            SaveGame(); // Perform the auto-save
+            autoSaveTimer = autoSaveInterval; // Reset the timer
         }
+    }
+
+    private void InitializeWashingMachines()
+    {
+        washingMachines = FindObjectsOfType<WashingMachine>();
     }
 
     public void SaveGame()
     {
+        InitializeWashingMachines(); // Initialize washing machines before saving
+
         PlayerPrefs.SetInt("Currency", MoneyManager.instance.currency);
         PlayerPrefs.SetInt("EmployeeLevel", EmployeeManager.instance.GetCurrentLevel());
         PlayerPrefs.SetInt("EmployeeSpeedLevel", EmployeeUpgradeUI.instance.GetCurrentSpeedLevel());
 
-        // Save any additional data as needed
+        // Save washing machine levels
+        for (int i = 0; i < washingMachines.Length; i++)
+        {
+            PlayerPrefs.SetInt("WashingMachineLevel_" + i, washingMachines[i].UpgradeLevel);
+        }
+
         PlayerPrefs.Save();
         Debug.Log("Game Saved!");
     }
 
     public void LoadGame()
     {
+        InitializeWashingMachines(); // Initialize washing machines before loading
+
         if (PlayerPrefs.HasKey("Currency"))
         {
             MoneyManager.instance.currency = PlayerPrefs.GetInt("Currency");
@@ -62,7 +83,19 @@ public class SaveManager : MonoBehaviour
             EmployeeUpgradeUI.instance.SetCurrentSpeedLevel(savedSpeedLevel);
         }
 
-        // Load any additional data as needed
+        // Load washing machine levels
+        for (int i = 0; i < washingMachines.Length; i++)
+        {
+            if (PlayerPrefs.HasKey("WashingMachineLevel_" + i))
+            {
+                int savedLevel = PlayerPrefs.GetInt("WashingMachineLevel_" + i);
+                for (int j = 0; j < savedLevel; j++)
+                {
+                    washingMachines[i].Upgrade(); // Upgrade the machine to the saved level
+                }
+            }
+        }
+
         Debug.Log("Game Loaded!");
     }
 
