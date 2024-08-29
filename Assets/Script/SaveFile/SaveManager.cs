@@ -45,26 +45,74 @@ public class SaveManager : MonoBehaviour
         washingMachines = FindObjectsOfType<WashingMachine>();
     }
 
-    public void SaveGame()
+    // public void SaveGame()
+    // {
+    //     InitializeWashingMachines(); // Ensure washing machines are initialized before saving
+
+    //     PlayerPrefs.SetInt("Currency", MoneyManager.instance.currency);
+    //     PlayerPrefs.SetInt("EmployeeLevel", EmployeeManager.instance.GetCurrentLevel());
+    //     PlayerPrefs.SetInt("EmployeeSpeedLevel", EmployeeUpgradeUI.instance.GetCurrentSpeedLevel());
+
+    //     // Save washing machine levels
+    //     if (washingMachines != null)
+    //     {
+    //         for (int i = 0; i < washingMachines.Length; i++)
+    //         {
+    //             PlayerPrefs.SetInt("WashingMachineLevel_" + i, washingMachines[i].UpgradeLevel);
+    //         }
+    //     }
+
+    //     PlayerPrefs.Save(); // Ensure PlayerPrefs is saved immediately
+    //     Debug.Log("Game Saved!");
+    // }
+
+public void SaveGame()
+{
+    InitializeWashingMachines(); // Ensure washing machines are initialized before saving
+
+    if (MoneyManager.instance != null)
     {
-        InitializeWashingMachines(); // Ensure washing machines are initialized before saving
-
         PlayerPrefs.SetInt("Currency", MoneyManager.instance.currency);
-        PlayerPrefs.SetInt("EmployeeLevel", EmployeeManager.instance.GetCurrentLevel());
-        PlayerPrefs.SetInt("EmployeeSpeedLevel", EmployeeUpgradeUI.instance.GetCurrentSpeedLevel());
-
-        // Save washing machine levels
-        if (washingMachines != null)
-        {
-            for (int i = 0; i < washingMachines.Length; i++)
-            {
-                PlayerPrefs.SetInt("WashingMachineLevel_" + i, washingMachines[i].UpgradeLevel);
-            }
-        }
-
-        PlayerPrefs.Save(); // Ensure PlayerPrefs is saved immediately
-        Debug.Log("Game Saved!");
     }
+    else
+    {
+        Debug.LogError("MoneyManager instance is null. Cannot save currency.");
+    }
+
+    if (EmployeeManager.instance != null)
+    {
+        PlayerPrefs.SetInt("EmployeeLevel", EmployeeManager.instance.GetCurrentLevel());
+    }
+    else
+    {
+        Debug.LogError("EmployeeManager instance is null. Cannot save employee level.");
+    }
+
+    if (EmployeeUpgradeUI.instance != null)
+    {
+        PlayerPrefs.SetInt("EmployeeSpeedLevel", EmployeeUpgradeUI.instance.GetCurrentSpeedLevel());
+    }
+    else
+    {
+        Debug.LogError("EmployeeUpgradeUI instance is null. Cannot save employee speed level.");
+    }
+
+    // Save washing machine levels
+    if (washingMachines != null)
+    {
+        for (int i = 0; i < washingMachines.Length; i++)
+        {
+            PlayerPrefs.SetInt("WashingMachineLevel_" + i, washingMachines[i].UpgradeLevel);
+        }
+    }
+    else
+    {
+        Debug.LogError("WashingMachines array is null. Cannot save washing machine levels.");
+    }
+
+    PlayerPrefs.Save(); // Ensure PlayerPrefs is saved immediately
+    Debug.Log("Game Saved!");
+}
 
     public void LoadGame()
     {
@@ -118,4 +166,38 @@ public class SaveManager : MonoBehaviour
             SaveGame(); // Auto-save when the application is paused (backgrounded on mobile)
         }
     }
+public void resetSave()
+{
+    PlayerPrefs.DeleteAll();
+    Debug.Log("PlayerPrefs deleted.");
+    
+    // Initialize the game state as if it's the first time
+    if (MoneyManager.instance != null)
+    {
+        MoneyManager.instance.currency = 1000000; // or any default value
+    }
+
+    if (EmployeeManager.instance != null)
+    {
+        EmployeeManager.instance.SetCurrentLevel(0);
+    }
+
+    if (EmployeeUpgradeUI.instance != null)
+    {
+        EmployeeUpgradeUI.instance.SetCurrentSpeedLevel(0);
+    }
+
+    InitializeWashingMachines();
+    if (washingMachines != null)
+    {
+        foreach (var machine in washingMachines)
+        {
+            machine.Unlock(); // Unlock and reset machine state as needed
+        }
+    }
+
+    SaveGame(); // Save the reset state
+    Debug.Log("Game reset and saved.");
+}
+
 }
