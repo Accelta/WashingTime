@@ -10,7 +10,7 @@ public class EmployeeManager : MonoBehaviour
     private int maxEmployees = 3; // Jumlah maksimum karyawan
     public static EmployeeManager instance;
 
-        private void Awake()
+    private void Awake()
     {
         // Singleton pattern
         if (instance == null)
@@ -24,23 +24,29 @@ public class EmployeeManager : MonoBehaviour
         }
     }
 
-    public void AddEmployee()
-{
-    if (currentlvl < maxEmployees)
+    private void Start()
     {
-        Transform spawnPoint = spawnPoints[employees.Count]; // Gunakan employees.Count sebagai index
-        GameObject newEmployee = Instantiate(employeePrefab, spawnPoint.position, spawnPoint.rotation);
-        employees.Add(newEmployee);
-        newEmployee.SetActive(true);
+        // Initialize employees based on the current level
+        InitializeEmployees();
+    }
 
-        currentlvl++; // Tingkatkan level saat karyawan baru ditambahkan
-        Debug.Log("New employee added! Total employees: " + employees.Count + ". Current Level: " + currentlvl);
-    }
-    else
+    public void AddEmployee()
     {
-        Debug.Log("Maximum number of employees reached!");
+        if (currentlvl < maxEmployees)
+        {
+            Transform spawnPoint = spawnPoints[employees.Count]; // Gunakan employees.Count sebagai index
+            GameObject newEmployee = Instantiate(employeePrefab, spawnPoint.position, spawnPoint.rotation);
+            employees.Add(newEmployee);
+            newEmployee.SetActive(true);
+
+            currentlvl++; // Tingkatkan level saat karyawan baru ditambahkan
+            Debug.Log("New employee added! Total employees: " + employees.Count + ". Current Level: " + currentlvl);
+        }
+        else
+        {
+            Debug.Log("Maximum number of employees reached!");
+        }
     }
-}
 
     public void UpgradeAllEmployeesSpeed(float additionalSpeed)
     {
@@ -65,14 +71,44 @@ public class EmployeeManager : MonoBehaviour
             }
         }
     }
-    public int GetCurrentLevel()
-{
-    return currentlvl; // Assuming you have a currentLevel variable
-}
 
-public void SetCurrentLevel(int level)
-{
-    currentlvl = level;
-    // Rebuild employees based on the saved level if necessary
-}
+    public int GetCurrentLevel()
+    {
+        return currentlvl;
+    }
+
+    public void SetCurrentLevel(int level)
+    {
+        currentlvl = level;
+        InitializeEmployees(); // Ensure employees are instantiated based on the saved level
+    }
+
+    private void InitializeEmployees()
+    {
+        // Clear existing employees
+        foreach (GameObject employee in employees)
+        {
+            Destroy(employee);
+        }
+        employees.Clear();
+
+        // Rebuild employees based on the current level
+        for (int i = 0; i < currentlvl; i++)
+        {
+            if (i < spawnPoints.Length)
+            {
+                Transform spawnPoint = spawnPoints[i];
+                GameObject newEmployee = Instantiate(employeePrefab, spawnPoint.position, spawnPoint.rotation);
+                employees.Add(newEmployee);
+                newEmployee.SetActive(true);
+            }
+            else
+            {
+                Debug.LogWarning("Not enough spawn points for the current level of employees.");
+                break;
+            }
+        }
+
+        Debug.Log("Employees initialized based on level: " + currentlvl);
+    }
 }
