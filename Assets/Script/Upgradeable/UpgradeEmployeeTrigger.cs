@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UpgradeEmployeeTrigger : MonoBehaviour
@@ -7,15 +8,15 @@ public class UpgradeEmployeeTrigger : MonoBehaviour
 
     void Start()
     {
-        upgradePanel.SetActive(false); // Sembunyikan panel di awal
+        upgradePanel.gameObject.GetComponent<Canvas>().enabled =false; // Sembunyikan panel di awal
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            upgradePanel.SetActive(true);
-            isPlayerInRange = true;
+        upgradePanel.gameObject.GetComponent<Canvas>().enabled =true;
+        isPlayerInRange = true;
         }
     }
 
@@ -23,12 +24,12 @@ public class UpgradeEmployeeTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            upgradePanel.SetActive(false);
+            upgradePanel.gameObject.GetComponent<Canvas>().enabled =false;
             isPlayerInRange = false;
         }
     }
     public void exit(){
-            upgradePanel.SetActive(false);
+            upgradePanel.gameObject.GetComponent<Canvas>().enabled =false;
             isPlayerInRange = false;
 
     }
