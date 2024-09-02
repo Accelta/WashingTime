@@ -296,8 +296,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d8c826e5ee1257343a622e0d09be0a47, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d8c826e5ee1257343a622e0d09be0a47, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8c826e5ee1257343a622e0d09be0a47, type: 3}
@@ -1409,6 +1413,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e0ad390c32a1b9f4c8a84e5f157b745d, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e0ad390c32a1b9f4c8a84e5f157b745d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0ad390c32a1b9f4c8a84e5f157b745d, type: 3}
 --- !u!4 &259995255 stripped
@@ -2067,6 +2079,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b9efcaa4c74c1a041a90a745b6ec3286, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b9efcaa4c74c1a041a90a745b6ec3286, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b9efcaa4c74c1a041a90a745b6ec3286, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9efcaa4c74c1a041a90a745b6ec3286, type: 3}
@@ -4535,8 +4555,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 850bd551f202c1e42859a1752598c1d4, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 850bd551f202c1e42859a1752598c1d4, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 850bd551f202c1e42859a1752598c1d4, type: 3}
@@ -7015,8 +7039,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e8ebee518c676914b839ff9c9a8e1165, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e8ebee518c676914b839ff9c9a8e1165, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8ebee518c676914b839ff9c9a8e1165, type: 3}
@@ -8579,8 +8607,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d964a14510928a441a3c89ef481008f0, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d964a14510928a441a3c89ef481008f0, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d964a14510928a441a3c89ef481008f0, type: 3}
@@ -8760,8 +8792,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6bb3fa9d589c72a4ca69d81e97a5978e, type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6bb3fa9d589c72a4ca69d81e97a5978e, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6bb3fa9d589c72a4ca69d81e97a5978e, type: 3}
@@ -12027,7 +12063,7 @@ HingeJoint:
   m_Anchor: {x: 0.27, y: 1.9713305, z: 2.41}
   m_Axis: {x: 1, y: 20.46, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 1334.9918, y: 518.5515, z: 45.109943}
   m_UseSpring: 1
   m_Spring:
     spring: 10
