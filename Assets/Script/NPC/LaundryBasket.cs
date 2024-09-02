@@ -20,11 +20,11 @@ public class LaundryBasket : MonoBehaviour
         }
     }
 
-    public int GetDirtyClothes()
+    public int TakeDirtyClothes(int amount)
     {
-        int clothes = currentDirtyClothes;
-        currentDirtyClothes = 0;
-        return clothes;
+        int clothesToTake = Mathf.Min(amount, currentDirtyClothes);
+        currentDirtyClothes -= clothesToTake;
+        return clothesToTake;
     }
 
     public bool IsFull()

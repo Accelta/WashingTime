@@ -248,15 +248,16 @@ public class Employee : MonoBehaviour
     }
 
     private void TakeDirtyClothes(LaundryBasket basket)
+{
+    int clothesToTake = Mathf.Min(maxDirtyClothes - dirtyClothesHolding, basket.TakeDirtyClothes(maxDirtyClothes - dirtyClothesHolding));
+    if (clothesToTake > 0)
     {
-        int clothesToTake = Mathf.Min(maxDirtyClothes - dirtyClothesHolding, basket.GetDirtyClothes());
-        if (clothesToTake > 0)
-        {
-            dirtyClothesHolding += clothesToTake;
-            isCarryingClothes = true;
-            GoToWashingMachine();
-        }
+        dirtyClothesHolding += clothesToTake;
+        isCarryingClothes = true;
+        GoToWashingMachine();
+        Debug.Log("Karyawan mengambil " + clothesToTake + " baju kotor. Sekarang membawa: " + dirtyClothesHolding);
     }
+}
 
     private void PutClothesInWashingMachine(WashingMachine machine)
     {
