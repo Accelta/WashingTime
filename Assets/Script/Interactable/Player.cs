@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
 
     private void TakeDirtyClothes(LaundryBasket basket)
     {
-        int clothesToTake = Mathf.Min(maxDirtyClothes - dirtyClothesHolding, basket.GetDirtyClothes());
+        int clothesToTake = Mathf.Min(maxDirtyClothes - dirtyClothesHolding, basket.TakeDirtyClothes(maxDirtyClothes - dirtyClothesHolding));
         if (clothesToTake > 0)
         {
             dirtyClothesHolding += clothesToTake;

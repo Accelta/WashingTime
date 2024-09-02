@@ -3316,7 +3316,7 @@ MonoBehaviour:
   - {fileID: 1662972659}
   exitPoint: {fileID: 1489899530}
   waitingArea: {fileID: 1138956108}
-  spawnInterval: 0.5
+  spawnInterval: 2
   maxLaundryQueueLength: 10
   maxCleanQueueLength: 10
 --- !u!4 &912991077
@@ -3749,7 +3749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 165e200c4caf6334a9763eb6f1af055f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  capacity: 5
+  capacity: 10
   currentDirtyClothes: 0
 --- !u!1 &1038811299
 GameObject:
