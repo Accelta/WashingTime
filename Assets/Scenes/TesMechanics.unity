@@ -8981,6 +8981,7 @@ GameObject:
   - component: {fileID: 1583027267018119574}
   - component: {fileID: 3468962314594379900}
   - component: {fileID: 4242561483133387512}
+  - component: {fileID: 4242561483133387513}
   m_Layer: 0
   m_Name: wash wall and floor
   m_TagString: Untagged
@@ -10002,6 +10003,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4242561483133387513
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304935027151351334}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3884610047060914592, guid: 08a8bde91bed80147b22a91569abe24b, type: 3}
 --- !u!1 &4469750556831324011
 GameObject:
   m_ObjectHideFlags: 0
@@ -10825,6 +10840,7 @@ GameObject:
   - component: {fileID: 4629904151825373250}
   - component: {fileID: 914805244250034844}
   - component: {fileID: 1561185853787404250}
+  - component: {fileID: 7584283843214983490}
   m_Layer: 0
   m_Name: 'wall and floor '
   m_TagString: Untagged
@@ -10832,6 +10848,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!64 &7584283843214983490
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7584283843214983489}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6132050304662085886, guid: 08a8bde91bed80147b22a91569abe24b, type: 3}
 --- !u!33 &7587793536599947530
 MeshFilter:
   m_ObjectHideFlags: 0
