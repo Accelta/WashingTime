@@ -2943,7 +2943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &792150755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2957,7 +2957,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  cleanClothesArea: {fileID: 1571771774}
+  cleanClothesArea: {fileID: 1370539441}
   exitPoint: {fileID: 1489899530}
   waitingArea: {fileID: 1138956108}
   payment: 20
@@ -4871,7 +4871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ironingSpeed: 1
-  cleanClothesArea: {fileID: 1370539444}
+  cleanClothesArea: {fileID: 0}
 --- !u!1 &1161580554
 GameObject:
   m_ObjectHideFlags: 0
@@ -7615,11 +7615,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8901567598534218688, guid: e8ebee518c676914b839ff9c9a8e1165, type: 3}
---- !u!4 &1571771774 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8680002657419956996, guid: ea68d121fe6b02b469c3a8a0f4682124, type: 3}
-  m_PrefabInstance: {fileID: 1370539440}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1572373028 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6dc3a3089e89553479cf6e5c59029a6a, type: 3}
@@ -12498,7 +12493,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5127254297892807039, guid: 08a8bde91bed80147b22a91569abe24b, type: 3}
 --- !u!59 &9138462143930845137
