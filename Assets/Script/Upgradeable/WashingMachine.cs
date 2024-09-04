@@ -24,6 +24,7 @@ public class WashingMachine : MonoBehaviour, IWashable
     public int UpgradeCost { get => upgradeCost; set => upgradeCost = value; }
     public bool IsUnlocked { get => isUnlocked; set => isUnlocked = value; }
     public int UpgradeLevel { get => upgradeLevel; } // Public getter for UpgradeLevel
+    public DryingMachine dryingMachine;
 
     private void Start()
     {
@@ -70,14 +71,20 @@ public class WashingMachine : MonoBehaviour, IWashable
         }
     }
 
-    private void FinishWashing()
+    // private void FinishWashing()
+    // {
+    //     isWashing = false;
+    //     cleanClothesArea.AddCleanClothes(dirtyClothesCount);
+    //     Debug.Log("Finished washing. Added " + dirtyClothesCount + " clean clothes.");
+    //     dirtyClothesCount = 0;
+    // }
+private void FinishWashing()
     {
         isWashing = false;
-        cleanClothesArea.AddCleanClothes(dirtyClothesCount);
-        Debug.Log("Finished washing. Added " + dirtyClothesCount + " clean clothes.");
+        dryingMachine.AddWetClothes(dirtyClothesCount);
+        Debug.Log("Finished washing. Moved " + dirtyClothesCount + " clothes to the drying machine.");
         dirtyClothesCount = 0;
     }
-
     public void Upgrade()
     {
         if (upgradeLevel >= 3)

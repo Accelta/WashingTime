@@ -2,32 +2,46 @@ using UnityEngine;
 
 public class IroningStation : MonoBehaviour
 {
-    public int clothesToIron = 0;
+    public float ironingSpeed = 1.0f;
+    public CleanClothesArea cleanClothesArea; // Reference to the clean clothes area
 
-    public void AddClothes(int count)
+    private int dryClothesCount = 0;
+    private bool isIroning = false;
+    private float ironingTimer = 0.0f;
+
+    public void AddDryClothes(int count)
     {
-        clothesToIron += count;
-        Debug.Log("Added " + count + " clothes to be ironed.");
+        dryClothesCount += count;
+        StartIroning();
     }
 
-    public bool IronClothes()
+    private void StartIroning()
     {
-        if (clothesToIron > 0)
+        if (dryClothesCount > 0 && !isIroning)
         {
-            clothesToIron--;
-            Debug.Log("Ironed one piece of clothing. Remaining: " + clothesToIron);
-            return true;
-        }
-        else
-        {
-            Debug.Log("No clothes to iron!");
-            return false;
+            isIroning = true;
+            ironingTimer = 6.0f; // Time required to iron the clothes
+            Debug.Log("Started ironing " + dryClothesCount + " clothes.");
         }
     }
 
-    public void FinishIroning(CleanClothesArea cleanClothesArea)
+    private void Update()
     {
-        cleanClothesArea.AddCleanClothes(1);
-        Debug.Log("Added one ironed piece of clothing to the clean clothes area.");
+        if (isIroning)
+        {
+            ironingTimer -= Time.deltaTime * ironingSpeed;
+            if (ironingTimer <= 0)
+            {
+                FinishIroning();
+            }
+        }
+    }
+
+    private void FinishIroning()
+    {
+        isIroning = false;
+        cleanClothesArea.AddCleanClothes(dryClothesCount);
+        Debug.Log("Finished ironing. Added " + dryClothesCount + " clothes to the clean clothes area.");
+        dryClothesCount = 0;
     }
 }
