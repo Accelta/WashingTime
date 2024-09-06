@@ -7,7 +7,7 @@ public class Customer : MonoBehaviour
     public Transform cleanClothesArea;
     public Transform exitPoint; // New exit point
     public Transform waitingArea; // New waiting area
-    public int payment = 20;
+    private int payment; // Random payment value
 
     private LaundryBasket laundryBasket;
     private static Queue<Customer> laundryQueue = new Queue<Customer>();
@@ -26,6 +26,10 @@ public class Customer : MonoBehaviour
         laundryBasket = FindObjectOfType<LaundryBasket>();
         laundryQueue.Enqueue(this);
         laundryQueuePosition = CustomerManager.GetNextLaundryQueuePosition();
+
+        // Set a random payment between 25 and 250
+        payment = Random.Range(25, 251);
+        Debug.Log("Customer will pay: " + payment);
     }
 
     private void Update()
@@ -125,8 +129,9 @@ public class Customer : MonoBehaviour
             Debug.Log("Attempting to take clean clothes. Current clean clothes count: " + area.cleanClothesCount);
             if (area.TakeCleanClothes())
             {
+                // Customer pays the random amount between 25 and 250
                 MoneyManager.instance.AddCurrency(payment);
-                Debug.Log("Took clean clothes and gave payment.");
+                Debug.Log("Took clean clothes and gave payment of: " + payment);
                 cleanClothesQueue.Dequeue();
                 CustomerManager.ReleaseCleanQueuePosition(cleanQueuePosition);
                 currentState = State.Leaving;
@@ -156,7 +161,7 @@ public class Customer : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, exitPoint.position, moveSpeed * Time.deltaTime);
             if (Vector3.Distance(transform.position, exitPoint.position) < 0.1f)
             {
-                Destroy(gameObject);
+                Destroy(gameObject); // Customer leaves and is destroyed
             }
         }
         else
