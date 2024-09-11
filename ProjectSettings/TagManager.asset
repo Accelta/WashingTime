@@ -11,6 +11,7 @@ TagManager:
   - Interact
   - WashingMachine
   - LaundryBasket
+  - LaundryBasketTarget
   layers:
   - Default
   - TransparentFX

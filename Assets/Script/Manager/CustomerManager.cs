@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 public class CustomerManager : MonoBehaviour
 {
-    public GameObject customerPrefab;
+    // List of different customer prefabs
+    public List<GameObject> customerPrefabs;
+    
     public Transform[] spawnPoints;
     public Transform[] laundryQueuePositions;
     public Transform[] cleanQueuePositions;
@@ -48,12 +50,20 @@ public class CustomerManager : MonoBehaviour
 
     private void SpawnCustomer()
     {
-        int randomIndex = Random.Range(0, spawnPoints.Length);
-        GameObject customer = Instantiate(customerPrefab, spawnPoints[randomIndex].position, Quaternion.identity);
+        // Select a random customer prefab variant from the list
+        int randomPrefabIndex = Random.Range(0, customerPrefabs.Count);
+
+        // Select a random spawn point
+        int randomSpawnIndex = Random.Range(0, spawnPoints.Length);
+
+        // Instantiate the random customer prefab at the spawn point
+        GameObject customer = Instantiate(customerPrefabs[randomPrefabIndex], spawnPoints[randomSpawnIndex].position, Quaternion.identity);
+        
         customer.GetComponent<Customer>().exitPoint = exitPoint; // Set the exit point
         customer.GetComponent<Customer>().waitingArea = waitingArea; // Set the waiting area
         customer.SetActive(true);
-        Debug.Log("Spawned customer at: " + spawnPoints[randomIndex].position);
+
+        Debug.Log("Spawned customer variant " + randomPrefabIndex + " at: " + spawnPoints[randomSpawnIndex].position);
     }
 
     public static Vector3 GetNextLaundryQueuePosition()
