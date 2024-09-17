@@ -24,7 +24,22 @@ public class MoneyManager : MonoBehaviour
 
     private void Start()
     {
+        // Ensure the currency text reference is set correctly after a reload
+        if (currencyText == null)
+        {
+            currencyText = FindObjectOfType<TextMeshProUGUI>();
+        }
         UpdateCurrencyText();
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        // Re-find and assign the UI element when the scene reloads
+        if (currencyText == null)
+        {
+            currencyText = FindObjectOfType<TextMeshProUGUI>();
+        }
+        UpdateCurrencyText(); // Update UI with the current value
     }
 
     public void AddCurrency(int amount)
@@ -41,7 +56,10 @@ public class MoneyManager : MonoBehaviour
 
     private void UpdateCurrencyText()
     {
-        currencyText.text = FormatCurrency(currency);
+        if (currencyText != null)
+        {
+            currencyText.text = FormatCurrency(currency);
+        }
     }
 
     private string FormatCurrency(int amount)
