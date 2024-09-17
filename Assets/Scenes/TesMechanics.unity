@@ -3524,28 +3524,6 @@ MonoBehaviour:
   cleanClothesArea: {fileID: 1370539441}
   exitPoint: {fileID: 1489899530}
   waitingArea: {fileID: 1138956108}
---- !u!195 &876316825
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876316823}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1 &912991075
 GameObject:
   m_ObjectHideFlags: 0
@@ -4244,28 +4222,6 @@ MonoBehaviour:
   cleanClothesArea: {fileID: 1370539441}
   exitPoint: {fileID: 1489899530}
   waitingArea: {fileID: 1138956108}
---- !u!195 &1130523336
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130523334}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1001 &1137980285
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7516,15 +7472,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e006a87764dd0f249902ada5aebf985b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.49
+      value: -12.34
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e006a87764dd0f249902ada5aebf985b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.08
+      value: 0.83
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e006a87764dd0f249902ada5aebf985b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.36
+      value: 1.73
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e006a87764dd0f249902ada5aebf985b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7576,7 +7532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e006a87764dd0f249902ada5aebf985b, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e006a87764dd0f249902ada5aebf985b, type: 3}
@@ -7937,28 +7893,6 @@ MonoBehaviour:
   cleanClothesArea: {fileID: 1370539441}
   exitPoint: {fileID: 1489899530}
   waitingArea: {fileID: 1138956108}
---- !u!195 &1712970614
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1712970612}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!1 &1729501923
 GameObject:
   m_ObjectHideFlags: 0
