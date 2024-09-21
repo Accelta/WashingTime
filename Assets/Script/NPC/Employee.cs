@@ -160,115 +160,80 @@ public class Employee : MonoBehaviour
 {
     public int dirtyClothesHolding = 0;
     public int maxDirtyClothes = 5;
-    public float interactionRange = 3.0f; // Range for interacting with objects
+    public float interactionRange = 3.0f; // Make sure it matches NavMeshAgent stopping distance
     public float walkSpeed = 2.5f;
     private NavMeshAgent agent;
     private bool isCarryingClothes = false;
-    public float detectionRadius = 5.0f; // Radius for detecting other employees
-    public LayerMask employeeLayer; // Layer for detecting other employees
+    public float detectionRadius = 5.0f;
+    public LayerMask employeeLayer;
     private Vector3 lastPosition;
     private float stuckTime = 0.0f;
     private float maxStuckTime = 1.0f;
-    private bool hasTakenClothes = false;
+
+    private Transform laundryBasket;
+    private WashingMachine targetWashingMachine;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
-        agent.stoppingDistance = 2.5f; // Increased stopping distance to avoid collisions
-        GoToLaundryBasket(); // Start by going to the laundry basket
+        agent.radius = 0.1f;  // Ensures radius matches your prefab setting
+        agent.stoppingDistance = interactionRange;
+        GoToLaundryBasket();
     }
 
     void Update()
     {
-        DetectStuck();
-        HandleInteractions();
-        CheckForObstacles(); // Check if other employees are in the way
+        CheckMovement();
+
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+            {
+                InteractWithCurrentTarget();
+            }
+        }
     }
 
-    // Detect if the employee is stuck and force path recalculation
-    private void DetectStuck()
+    private void CheckMovement()
     {
-        if (Vector3.Distance(transform.position, lastPosition) < 0.1f)
+        if (Vector3.Distance(transform.position, lastPosition) < 0.1f) // Detect if stuck
         {
             stuckTime += Time.deltaTime;
             if (stuckTime > maxStuckTime)
             {
-                agent.SetDestination(agent.destination); // Recalculate path if stuck
-                stuckTime = 0.0f; // Reset stuck timer
+                RecalculatePath();
+                stuckTime = 0.0f;
             }
         }
         else
         {
-            stuckTime = 0.0f; // Reset if moving
+            stuckTime = 0.0f;
         }
 
         lastPosition = transform.position;
     }
 
-    // Handle interactions with laundry basket and washing machine
-    private void HandleInteractions()
+    private void RecalculatePath()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRange);
-        foreach (var hitCollider in hitColliders)
-        {
-            if (hitCollider.CompareTag("LaundryBasket") && !isCarryingClothes)
-            {
-                LaundryBasket basket = hitCollider.GetComponent<LaundryBasket>();
-                if (basket != null)
-                {
-                    TakeDirtyClothes(basket);
-                }
-            }
-            else if (hitCollider.CompareTag("WashingMachine") && isCarryingClothes)
-            {
-                WashingMachine machine = hitCollider.GetComponent<WashingMachine>();
-                if (machine != null)
-                {
-                    PutClothesInWashingMachine(machine);
-                }
-            }
-        }
+        agent.SetDestination(agent.destination); // Recalculate path
     }
 
-    // Recalculate path if another employee is nearby
-    private void CheckForObstacles()
-    {
-        Collider[] employeesNearby = Physics.OverlapSphere(transform.position, detectionRadius, employeeLayer);
-        foreach (var employee in employeesNearby)
-        {
-            if (employee.gameObject != this.gameObject)
-            {
-                agent.SetDestination(agent.destination); // Force path recalculation if another employee is nearby
-                break;
-            }
-        }
-    }
-
-    // Go to the laundry basket
     private void GoToLaundryBasket()
     {
-        if (!hasTakenClothes) // Only go to basket if not carrying clothes
-        {
-            Transform laundryBasket = GameObject.FindWithTag("LaundryBasket").transform;
-            if (laundryBasket != null)
-            {
-                agent.SetDestination(laundryBasket.position);
-            }
-        }
+        laundryBasket = GameObject.FindWithTag("LaundryBasket").transform;
+        agent.SetDestination(laundryBasket.position);
     }
 
-    // Go to the nearest washing machine
     private void GoToWashingMachine()
     {
-        WashingMachine nearestMachine = FindNearestAvailableWashingMachine();
-        if (nearestMachine != null)
+        targetWashingMachine = FindNearestAvailableWashingMachine();
+        if (targetWashingMachine != null)
         {
-            agent.SetDestination(nearestMachine.transform.position);
+            agent.SetDestination(targetWashingMachine.transform.position);
         }
     }
 
-    // Find the nearest available washing machine
     private WashingMachine FindNearestAvailableWashingMachine()
     {
         WashingMachine[] allMachines = FindObjectsOfType<WashingMachine>();
@@ -291,7 +256,24 @@ public class Employee : MonoBehaviour
         return nearestMachine;
     }
 
-    // Take dirty clothes from the laundry basket
+    private void InteractWithCurrentTarget()
+    {
+        if (isCarryingClothes && targetWashingMachine != null)
+        {
+            // Interaction with washing machine
+            PutClothesInWashingMachine(targetWashingMachine);
+        }
+        else if (!isCarryingClothes && laundryBasket != null)
+        {
+            // Interaction with laundry basket
+            LaundryBasket basket = laundryBasket.GetComponent<LaundryBasket>();
+            if (basket != null)
+            {
+                TakeDirtyClothes(basket);
+            }
+        }
+    }
+
     private void TakeDirtyClothes(LaundryBasket basket)
     {
         int clothesToTake = Mathf.Min(maxDirtyClothes - dirtyClothesHolding, basket.TakeDirtyClothes(maxDirtyClothes - dirtyClothesHolding));
@@ -299,34 +281,31 @@ public class Employee : MonoBehaviour
         {
             dirtyClothesHolding += clothesToTake;
             isCarryingClothes = true;
-            hasTakenClothes = true; // Set flag to avoid recalculating destination
             GoToWashingMachine();
+            Debug.Log("Karyawan mengambil " + clothesToTake + " baju kotor. Sekarang membawa: " + dirtyClothesHolding);
         }
     }
 
-    // Put clothes into the washing machine
     private void PutClothesInWashingMachine(WashingMachine machine)
     {
         if (dirtyClothesHolding > 0 && machine.AddDirtyClothes(dirtyClothesHolding))
         {
             dirtyClothesHolding = 0;
             isCarryingClothes = false;
-            hasTakenClothes = false; // Reset flag to go back to laundry basket
             GoToLaundryBasket();
         }
     }
 
-    // Upgrade walking speed
     public void UpgradeSpeed(float additionalSpeed)
     {
         walkSpeed += additionalSpeed;
         agent.speed = walkSpeed;
     }
 
-    // Upgrade carrying capacity
     public void UpgradeCapacity(int additionalCapacity)
     {
         maxDirtyClothes += additionalCapacity;
     }
 }
+
 
