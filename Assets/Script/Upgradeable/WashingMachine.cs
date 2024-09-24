@@ -7,7 +7,7 @@ public class WashingMachine : MonoBehaviour, IWashable
     public float upgradeAmount = 0.5f;
     public int upgradeCost = 50;
     public bool isUnlocked = false;
-    public Texture[] upgradeTextures;
+    public GameObject[] washingMachineLevels; // Array to hold the different levels of washing machines (drag the child objects in the inspector)
     public GameObject levelBubblePrefab;
     public GameObject upgradeArea; // Assign the upgrade area specific to this machine in the editor
 
@@ -15,8 +15,7 @@ public class WashingMachine : MonoBehaviour, IWashable
     private float washTimer = 0.0f;
     public bool isWashing = false;
     private CleanClothesArea cleanClothesArea;
-    private Renderer machineRenderer;
-    private int upgradeLevel = 0;
+    private int upgradeLevel = 0; // Start at level 0
     private GameObject levelBubble;
 
     public float WashSpeed { get => washSpeed; set => washSpeed = value; }
@@ -29,8 +28,17 @@ public class WashingMachine : MonoBehaviour, IWashable
     private void Start()
     {
         cleanClothesArea = FindObjectOfType<CleanClothesArea>();
-        machineRenderer = GetComponent<Renderer>();
-        UpdateTexture();
+        
+        // Ensure that the machine is hidden if it's not unlocked
+        if (!isUnlocked)
+        {
+            HideWashingMachine();
+        }
+        else
+        {
+            UpdateMachineModel();
+        }
+
         CreateLevelBubble();
     }
 
@@ -71,23 +79,17 @@ public class WashingMachine : MonoBehaviour, IWashable
         }
     }
 
-    // private void FinishWashing()
-    // {
-    //     isWashing = false;
-    //     cleanClothesArea.AddCleanClothes(dirtyClothesCount);
-    //     Debug.Log("Finished washing. Added " + dirtyClothesCount + " clean clothes.");
-    //     dirtyClothesCount = 0;
-    // }
-private void FinishWashing()
+    private void FinishWashing()
     {
         isWashing = false;
         dryingMachine.AddWetClothes(dirtyClothesCount);
         Debug.Log("Finished washing. Moved " + dirtyClothesCount + " clothes to the drying machine.");
         dirtyClothesCount = 0;
     }
+
     public void Upgrade()
     {
-        if (upgradeLevel >= 3)
+        if (upgradeLevel >= washingMachineLevels.Length - 1)
         {
             Debug.Log("Maximum upgrade level reached.");
             if (upgradeArea != null)
@@ -103,11 +105,11 @@ private void FinishWashing()
             washSpeed += upgradeAmount;
             upgradeLevel++;
             upgradeCost = Mathf.RoundToInt(upgradeCost * 2.5f); // Increase the cost for the next upgrade
-            UpdateTexture();
+            UpdateMachineModel(); // Switch to the new level's model
             UpdateLevelBubble();
             Debug.Log("Washing machine upgraded! New wash speed: " + washSpeed + ", next upgrade cost: " + upgradeCost);
 
-            if (upgradeLevel >= 3 && upgradeArea != null)
+            if (upgradeLevel >= washingMachineLevels.Length - 1 && upgradeArea != null)
             {
                 upgradeArea.SetActive(false); // Disable the upgrade area if max level is reached
             }
@@ -121,18 +123,26 @@ private void FinishWashing()
     public void Unlock()
     {
         isUnlocked = true;
+        ShowWashingMachine(); // Show the washing machine once unlocked
         Debug.Log("Washing machine unlocked!");
     }
 
-    private void UpdateTexture()
+    private void UpdateMachineModel()
     {
-        if (upgradeLevel < upgradeTextures.Length)
+        // Disable all washing machine levels
+        foreach (GameObject machine in washingMachineLevels)
         {
-            machineRenderer.material.mainTexture = upgradeTextures[upgradeLevel];
+            machine.SetActive(false);
+        }
+
+        // Enable the machine corresponding to the current upgrade level
+        if (upgradeLevel < washingMachineLevels.Length)
+        {
+            washingMachineLevels[upgradeLevel].SetActive(true);
         }
         else
         {
-            Debug.Log("Max upgrade level reached. No more textures to apply.");
+            Debug.LogError("Upgrade level exceeds available machine models.");
         }
     }
 
@@ -152,6 +162,21 @@ private void FinishWashing()
 
     public bool CanUpgrade()
     {
-        return upgradeLevel < 3;
+        return upgradeLevel < washingMachineLevels.Length - 1;
+    }
+
+    // Hide all washing machine models when locked
+    private void HideWashingMachine()
+    {
+        foreach (GameObject machine in washingMachineLevels)
+        {
+            machine.SetActive(false);
+        }
+    }
+
+    // Show the machine model once unlocked
+    private void ShowWashingMachine()
+    {
+        UpdateMachineModel(); // This will enable the correct machine model
     }
 }

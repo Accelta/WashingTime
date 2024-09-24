@@ -19,7 +19,11 @@ public class UpgradeUI : MonoBehaviour
 
     public void OnUpgradeButtonClicked()
     {
-        if (currentMachine.UpgradeLevel < 3 && MoneyManager.instance.currency >= currentMachine.UpgradeCost)
+        if (!currentMachine.IsUnlocked) // If the machine is locked, trigger unlock
+        {
+            TryUnlock();
+        }
+        else if (currentMachine.UpgradeLevel < 3 && MoneyManager.instance.currency >= currentMachine.UpgradeCost)
         {
             currentMachine.Upgrade();
             UpdateUI();
@@ -28,28 +32,55 @@ public class UpgradeUI : MonoBehaviour
 
     private void UpdateUI()
     {
-        if (currentMachine.UpgradeLevel < 3)
+        if (!currentMachine.IsUnlocked)
         {
-            upgradeCostText.text = "Upgrade : " + currentMachine.UpgradeCost;
+            // Machine is locked, show "Unlock" text and hide level indicators
+            upgradeCostText.text = "Unlock: " + currentMachine.UpgradeCost;
             upgradeButton.interactable = MoneyManager.instance.currency >= currentMachine.UpgradeCost;
+            
+            // Disable level indicators (e.g. gray them out)
+            foreach (Image indicator in levelIndicators)
+            {
+                indicator.gameObject.SetActive(false); // Hide the level indicators when locked
+            }
         }
         else
         {
-            upgradeCostText.text = "Max Level";
-            upgradeButton.interactable = false;
-        }
-
-        for (int i = 0; i < levelIndicators.Length; i++)
-        {
-            if (i < currentMachine.UpgradeLevel)
+            // Machine is unlocked, update the upgrade UI
+            if (currentMachine.UpgradeLevel < 3)
             {
-                levelIndicators[i].sprite = blueBubble;
+                upgradeCostText.text = "Upgrade: " + currentMachine.UpgradeCost;
+                upgradeButton.interactable = MoneyManager.instance.currency >= currentMachine.UpgradeCost;
             }
             else
             {
-                levelIndicators[i].sprite = greyBubble;
+                upgradeCostText.text = "Max Level";
+                upgradeButton.interactable = false;
+            }
+
+            // Update level indicators
+            for (int i = 0; i < levelIndicators.Length; i++)
+            {
+                levelIndicators[i].gameObject.SetActive(true); // Show the indicators
+                if (i < currentMachine.UpgradeLevel)
+                {
+                    levelIndicators[i].sprite = blueBubble;
+                }
+                else
+                {
+                    levelIndicators[i].sprite = greyBubble;
+                }
             }
         }
     }
-    
+
+    private void TryUnlock()
+    {
+        if (MoneyManager.instance.currency >= currentMachine.UpgradeCost)
+        {
+            MoneyManager.instance.SpendCurrency(currentMachine.UpgradeCost);
+            currentMachine.Unlock();
+            UpdateUI(); // Refresh UI after unlocking
+        }
+    }
 }

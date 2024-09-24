@@ -28,7 +28,7 @@ public class Customer : MonoBehaviour
         laundryQueuePosition = CustomerManager.GetNextLaundryQueuePosition();
 
         // Set a random payment between 25 and 250
-        payment = Random.Range(25, 251);
+        payment = Random.Range(25, 250);
         Debug.Log("Customer will pay: " + payment);
     }
 

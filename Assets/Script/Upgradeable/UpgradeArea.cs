@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class UpgradeArea : MonoBehaviour
 {
-    public MonoBehaviour washableDevice;  // Referensi ke alat cuci yang akan di-upgrade atau dibuka
+    public MonoBehaviour washableDevice;  // Reference to the washable device (WashingMachine)
     private IWashable washable;
+    public UpgradeUI upgradeUI; // Reference to the UpgradeUI script to update UI
 
     private void Start()
     {
@@ -29,6 +30,7 @@ public class UpgradeArea : MonoBehaviour
             {
                 MoneyManager.instance.SpendCurrency(upgradeCost);
                 washable.Unlock();
+                upgradeUI.Setup(washableDevice as WashingMachine); // Refresh UI after unlocking
             }
             else if (playerCurrency > 0)
             {
@@ -47,6 +49,7 @@ public class UpgradeArea : MonoBehaviour
             {
                 MoneyManager.instance.SpendCurrency(upgradeCost);
                 washable.Upgrade();
+                upgradeUI.Setup(washableDevice as WashingMachine); // Refresh UI after upgrade
             }
             else if (playerCurrency > 0)
             {
