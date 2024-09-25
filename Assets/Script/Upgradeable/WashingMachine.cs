@@ -24,6 +24,7 @@ public class WashingMachine : MonoBehaviour, IWashable
     public bool IsUnlocked { get => isUnlocked; set => isUnlocked = value; }
     public int UpgradeLevel { get => upgradeLevel; } // Public getter for UpgradeLevel
     public DryingMachine dryingMachine;
+    private AudioSource audioSource;
 
     private void Start()
     {
@@ -40,6 +41,7 @@ public class WashingMachine : MonoBehaviour, IWashable
         }
 
         CreateLevelBubble();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -76,6 +78,11 @@ public class WashingMachine : MonoBehaviour, IWashable
             isWashing = true;
             washTimer = 10.0f; // Waktu mencuci 10 detik
             Debug.Log("Started washing " + dirtyClothesCount + " clothes.");
+             if (audioSource != null && !audioSource.isPlaying)
+            {
+                audioSource.loop = true; // Ensure it loops during washing
+                audioSource.Play();
+            }
         }
     }
 
@@ -85,6 +92,10 @@ public class WashingMachine : MonoBehaviour, IWashable
         dryingMachine.AddWetClothes(dirtyClothesCount);
         Debug.Log("Finished washing. Moved " + dirtyClothesCount + " clothes to the drying machine.");
         dirtyClothesCount = 0;
+         if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
     }
 
     public void Upgrade()
