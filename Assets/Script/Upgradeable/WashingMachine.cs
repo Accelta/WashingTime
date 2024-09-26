@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WashingMachine : MonoBehaviour, IWashable
 {
@@ -25,7 +26,11 @@ public class WashingMachine : MonoBehaviour, IWashable
     public int UpgradeLevel { get => upgradeLevel; } // Public getter for UpgradeLevel
     public DryingMachine dryingMachine;
     private AudioSource audioSource;
-
+    
+ public GameObject progressBarPrefab;  // Prefab of the background and fill image
+    public Canvas worldCanvas;            // Assign a world-space canvas in the inspector
+    private GameObject progressBarInstance;
+    private Image progressBarFillImage;    // Image component with fill type
     private void Start()
     {
         cleanClothesArea = FindObjectOfType<CleanClothesArea>();
@@ -44,11 +49,20 @@ public class WashingMachine : MonoBehaviour, IWashable
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void Update()
+private void Update()
     {
         if (isWashing)
         {
+            // Reduce the wash timer over time
             washTimer -= Time.deltaTime * washSpeed;
+
+            // Update the fill amount on the progress bar image (normalized between 0 and 1)
+            if (progressBarFillImage != null)
+            {
+                progressBarFillImage.fillAmount = (10.0f - washTimer) / 10.0f;  // 10 seconds total time
+            }
+
+            // Check if washing is complete
             if (washTimer <= 0)
             {
                 FinishWashing();
@@ -76,26 +90,34 @@ public class WashingMachine : MonoBehaviour, IWashable
         if (dirtyClothesCount > 0)
         {
             isWashing = true;
-            washTimer = 10.0f; // Waktu mencuci 10 detik
+            washTimer = 10.0f; // Washing takes 10 seconds
             Debug.Log("Started washing " + dirtyClothesCount + " clothes.");
-             if (audioSource != null && !audioSource.isPlaying)
-            {
-                audioSource.loop = true; // Ensure it loops during washing
-                audioSource.Play();
-            }
+
+            // Instantiate progress bar and attach to the world canvas
+            progressBarInstance = Instantiate(progressBarPrefab, worldCanvas.transform);
+            progressBarInstance.transform.position = transform.position + Vector3.up * 2;  // Adjust position above the washing machine
+
+            // Find the Image with the fill type in the instantiated prefab
+            progressBarFillImage = progressBarInstance.transform.Find("Fill").GetComponent<Image>();
+
+            // Make sure the bar starts empty
+            progressBarFillImage.fillAmount = 0.0f;
         }
     }
 
-    private void FinishWashing()
+         private void FinishWashing()
     {
         isWashing = false;
-        dryingMachine.AddWetClothes(dirtyClothesCount);
-        Debug.Log("Finished washing. Moved " + dirtyClothesCount + " clothes to the drying machine.");
-        dirtyClothesCount = 0;
-         if (audioSource != null && audioSource.isPlaying)
+
+        // Destroy progress bar when washing finishes
+        if (progressBarInstance != null)
         {
-            audioSource.Stop();
+            Destroy(progressBarInstance);
         }
+
+        Debug.Log("Finished washing. All clothes are clean.");
+        dryingMachine.AddWetClothes(dirtyClothesCount);
+        dirtyClothesCount = 0;
     }
 
     public void Upgrade()

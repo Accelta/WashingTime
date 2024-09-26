@@ -10,7 +10,7 @@ public class TutorialUI : MonoBehaviour
     {
         if (tutorialImage != null)
         {
-            tutorialImage.gameObject.SetActive(false); // Ensure the image is initially inactive
+            tutorialImage.gameObject.SetActive(true); // Ensure the image is initially inactive
         }
     }
 
