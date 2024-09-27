@@ -1,3 +1,218 @@
+// using TMPro;
+// using UnityEngine;
+// using UnityEngine.UI;
+
+// public class WashingMachine : MonoBehaviour, IWashable
+// {
+//     public float washSpeed = 1.0f;
+//     public float upgradeAmount = 0.5f;
+//     public int upgradeCost = 50;
+//     public bool isUnlocked = false;
+//     public GameObject[] washingMachineLevels; // Array to hold the different levels of washing machines (drag the child objects in the inspector)
+//     public GameObject levelBubblePrefab;
+//     public GameObject upgradeArea; // Assign the upgrade area specific to this machine in the editor
+
+//     private int dirtyClothesCount = 0;
+//     private float washTimer = 0.0f;
+//     public bool isWashing = false;
+//     private CleanClothesArea cleanClothesArea;
+//     private int upgradeLevel = 0; // Start at level 0
+//     private GameObject levelBubble;
+
+//     public float WashSpeed { get => washSpeed; set => washSpeed = value; }
+//     public float UpgradeAmount { get => upgradeAmount; }
+//     public int UpgradeCost { get => upgradeCost; set => upgradeCost = value; }
+//     public bool IsUnlocked { get => isUnlocked; set => isUnlocked = value; }
+//     public int UpgradeLevel { get => upgradeLevel; } // Public getter for UpgradeLevel
+//     public DryingMachine dryingMachine;
+//     private AudioSource audioSource;
+    
+//  public GameObject progressBarPrefab;  // Prefab of the background and fill image
+//     public Canvas worldCanvas;            // Assign a world-space canvas in the inspector
+//     private GameObject progressBarInstance;
+//     private Image progressBarFillImage;    // Image component with fill type
+//     private void Start()
+//     {
+//         cleanClothesArea = FindObjectOfType<CleanClothesArea>();
+        
+//         // Ensure that the machine is hidden if it's not unlocked
+//         if (!isUnlocked)
+//         {
+//             HideWashingMachine();
+//         }
+//         else
+//         {
+//             UpdateMachineModel();
+//         }
+
+//         CreateLevelBubble();
+//         audioSource = GetComponent<AudioSource>();
+//     }
+
+// private void Update()
+//     {
+//         if (isWashing)
+//         {
+//             // Reduce the wash timer over time
+//             washTimer -= Time.deltaTime * washSpeed;
+
+//             // Update the fill amount on the progress bar image (normalized between 0 and 1)
+//             if (progressBarFillImage != null)
+//             {
+//                 progressBarFillImage.fillAmount = (10.0f - washTimer) / 10.0f;  // 10 seconds total time
+//             }
+
+//             // Check if washing is complete
+//             if (washTimer <= 0)
+//             {
+//                 FinishWashing();
+//             }
+//         }
+//     }
+
+//     public bool AddDirtyClothes(int count)
+//     {
+//         if (!isWashing)
+//         {
+//             dirtyClothesCount += count;
+//             StartWashing();
+//             return true;
+//         }
+//         else
+//         {
+//             Debug.Log("Washing machine is currently in use.");
+//             return false;
+//         }
+//     }
+
+//     private void StartWashing()
+//     {
+//         if (dirtyClothesCount > 0)
+//         {
+//             isWashing = true;
+//             washTimer = 10.0f; // Washing takes 10 seconds
+//             Debug.Log("Started washing " + dirtyClothesCount + " clothes.");
+
+//             // Instantiate progress bar and attach to the world canvas
+//             progressBarInstance = Instantiate(progressBarPrefab, worldCanvas.transform);
+//             progressBarInstance.transform.position = transform.position + Vector3.up * 2;  // Adjust position above the washing machine
+
+//             // Find the Image with the fill type in the instantiated prefab
+//             progressBarFillImage = progressBarInstance.transform.Find("Fill").GetComponent<Image>();
+
+//             // Make sure the bar starts empty
+//             progressBarFillImage.fillAmount = 0.0f;
+//         }
+//     }
+
+//          private void FinishWashing()
+//     {
+//         isWashing = false;
+
+//         // Destroy progress bar when washing finishes
+//         if (progressBarInstance != null)
+//         {
+//             Destroy(progressBarInstance);
+//         }
+
+//         Debug.Log("Finished washing. All clothes are clean.");
+//         dryingMachine.AddWetClothes(dirtyClothesCount);
+//         dirtyClothesCount = 0;
+//     }
+
+//     public void Upgrade()
+//     {
+//         if (upgradeLevel >= washingMachineLevels.Length - 1)
+//         {
+//             Debug.Log("Maximum upgrade level reached.");
+//             if (upgradeArea != null)
+//             {
+//                 upgradeArea.SetActive(false); // Disable the upgrade area if max level is reached
+//             }
+//             return;
+//         }
+
+//         if (MoneyManager.instance.currency >= upgradeCost)
+//         {
+//             MoneyManager.instance.SpendCurrency(upgradeCost);
+//             washSpeed += upgradeAmount;
+//             upgradeLevel++;
+//             upgradeCost = Mathf.RoundToInt(upgradeCost * 2.5f); // Increase the cost for the next upgrade
+//             UpdateMachineModel(); // Switch to the new level's model
+//             UpdateLevelBubble();
+//             Debug.Log("Washing machine upgraded! New wash speed: " + washSpeed + ", next upgrade cost: " + upgradeCost);
+
+//             if (upgradeLevel >= washingMachineLevels.Length - 1 && upgradeArea != null)
+//             {
+//                 upgradeArea.SetActive(false); // Disable the upgrade area if max level is reached
+//             }
+//         }
+//         else
+//         {
+//             Debug.Log("Not enough money to upgrade.");
+//         }
+//     }
+
+//     public void Unlock()
+//     {
+//         isUnlocked = true;
+//         ShowWashingMachine(); // Show the washing machine once unlocked
+//         Debug.Log("Washing machine unlocked!");
+//     }
+
+//     private void UpdateMachineModel()
+//     {
+//         // Disable all washing machine levels
+//         foreach (GameObject machine in washingMachineLevels)
+//         {
+//             machine.SetActive(false);
+//         }
+
+//         // Enable the machine corresponding to the current upgrade level
+//         if (upgradeLevel < washingMachineLevels.Length)
+//         {
+//             washingMachineLevels[upgradeLevel].SetActive(true);
+//         }
+//         else
+//         {
+//             Debug.LogError("Upgrade level exceeds available machine models.");
+//         }
+//     }
+
+//     private void CreateLevelBubble()
+//     {
+//         levelBubble = Instantiate(levelBubblePrefab, transform.position + Vector3.up * 2, Quaternion.identity, transform);
+//         UpdateLevelBubble();
+//     }
+
+//     private void UpdateLevelBubble()
+//     {
+//         if (levelBubble != null)
+//         {
+//             levelBubble.GetComponentInChildren<TextMeshProUGUI>().text = "Level " + upgradeLevel;
+//         }
+//     }
+
+//     public bool CanUpgrade()
+//     {
+//         return upgradeLevel < washingMachineLevels.Length - 1;
+//     }
+
+//     // Hide all washing machine models when locked
+//     private void HideWashingMachine()
+//     {
+//         foreach (GameObject machine in washingMachineLevels)
+//         {
+//             machine.SetActive(false);
+//         }
+//     }
+
+//     // Show the machine model once unlocked
+//     private void ShowWashingMachine()
+//     {
+//         UpdateMachineModel(); // This will enable the correct machine model
+//     }
+// }
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +222,7 @@ public class WashingMachine : MonoBehaviour, IWashable
     public float washSpeed = 1.0f;
     public float upgradeAmount = 0.5f;
     public int upgradeCost = 50;
-    public bool isUnlocked = false;
+    public bool isUnlocked = false; // This controls if the machine is unlocked
     public GameObject[] washingMachineLevels; // Array to hold the different levels of washing machines (drag the child objects in the inspector)
     public GameObject levelBubblePrefab;
     public GameObject upgradeArea; // Assign the upgrade area specific to this machine in the editor
@@ -26,15 +241,16 @@ public class WashingMachine : MonoBehaviour, IWashable
     public int UpgradeLevel { get => upgradeLevel; } // Public getter for UpgradeLevel
     public DryingMachine dryingMachine;
     private AudioSource audioSource;
-    
- public GameObject progressBarPrefab;  // Prefab of the background and fill image
+
+    public GameObject progressBarPrefab;  // Prefab of the background and fill image
     public Canvas worldCanvas;            // Assign a world-space canvas in the inspector
     private GameObject progressBarInstance;
     private Image progressBarFillImage;    // Image component with fill type
+
     private void Start()
     {
         cleanClothesArea = FindObjectOfType<CleanClothesArea>();
-        
+
         // Ensure that the machine is hidden if it's not unlocked
         if (!isUnlocked)
         {
@@ -49,7 +265,7 @@ public class WashingMachine : MonoBehaviour, IWashable
         audioSource = GetComponent<AudioSource>();
     }
 
-private void Update()
+    private void Update()
     {
         if (isWashing)
         {
@@ -72,6 +288,13 @@ private void Update()
 
     public bool AddDirtyClothes(int count)
     {
+        // Check if the machine is unlocked before adding dirty clothes
+        if (!isUnlocked)
+        {
+            Debug.Log("Washing machine is locked and cannot be used.");
+            return false; // Return false because the machine is locked
+        }
+
         if (!isWashing)
         {
             dirtyClothesCount += count;
@@ -87,6 +310,13 @@ private void Update()
 
     private void StartWashing()
     {
+        // Check if the machine is unlocked before starting the washing process
+        if (!isUnlocked)
+        {
+            Debug.Log("Washing machine is locked and cannot start washing.");
+            return; // Exit the function because the machine is locked
+        }
+
         if (dirtyClothesCount > 0)
         {
             isWashing = true;
@@ -105,7 +335,7 @@ private void Update()
         }
     }
 
-         private void FinishWashing()
+    private void FinishWashing()
     {
         isWashing = false;
 
