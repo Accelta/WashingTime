@@ -46,12 +46,15 @@ public class MoneyManager : MonoBehaviour
     {
         currency += amount;
         UpdateCurrencyText();
+         EmployeeUpgradeUI.instance?.UpdateUI();
     }
 
     public void SpendCurrency(int amount)
     {
         currency -= amount;
         UpdateCurrencyText();
+        EmployeeUpgradeUI.instance?.UpdateUI();
+
     }
 
     private void UpdateCurrencyText()

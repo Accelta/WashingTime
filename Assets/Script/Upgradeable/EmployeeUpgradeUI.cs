@@ -14,10 +14,10 @@ public class EmployeeUpgradeUI : MonoBehaviour
     public Sprite greyBubble;
 
     private int currentLevel = 0;
-    private int[] upgradeCosts = { 80000, 120000, 160000 }; // Biaya untuk setiap level upgrade karyawan
+    private int[] upgradeCosts = { 8000, 12000, 16000 }; // Biaya untuk setiap level upgrade karyawan
     private float[] speedLevels = { 2.5f, 2.7f, 2.8f, 3.0f }; // Kecepatan berjalan untuk setiap level
     private int currentSpeedLevel = 0;
-    private int[] speedUpgradeCosts = { 60000, 80000, 100000 }; // Biaya untuk upgrade kecepatan berjalan
+    private int[] speedUpgradeCosts = { 6000, 8000, 10000 }; // Biaya untuk upgrade kecepatan berjalan
 
     public EmployeeManager employeeManager;
     public static EmployeeUpgradeUI instance;
@@ -66,7 +66,7 @@ public class EmployeeUpgradeUI : MonoBehaviour
         }
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         // Update UI untuk level karyawan
         if (currentLevel < 3)
